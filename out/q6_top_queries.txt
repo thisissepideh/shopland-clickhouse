@@ -1,0 +1,57 @@
+Row 1:
+──────
+normalized_query_hash: 17670383416599356034
+runs:                  1
+max_read_bytes:        141.10 MiB
+read_rows:             10000000 -- 10.00 million
+max_ms:                1522
+sample_query:          SELECT customer_id,
+       sum(toUInt64(quantity) * unit_price)           AS total_spent,
+       argMax(order_id, toUInt64(quantity) * unit_price) AS priciest_o
+
+Row 2:
+──────
+normalized_query_hash: 7098865216321852756
+runs:                  1
+max_read_bytes:        83.96 MiB
+read_rows:             10005000 -- 10.01 million
+max_ms:                1063
+sample_query:          SELECT p.category, sum(toUInt64(o.quantity) * o.unit_price) AS revenue
+FROM shop.orders AS o
+INNER JOIN shop.products_pg AS p ON o.product_id = p.product_id
+WHE
+
+Row 3:
+──────
+normalized_query_hash: 5282225088164910346
+runs:                  1
+max_read_bytes:        83.88 MiB
+read_rows:             10000000 -- 10.00 million
+max_ms:                886
+sample_query:          SELECT toStartOfMonth(created_at) AS month, uniqExact(customer_id) AS exact_unique
+FROM shop.orders GROUP BY month ORDER BY month
+SETTINGS log_comment = 'q10_un
+
+Row 4:
+──────
+normalized_query_hash: 1234393111062259661
+runs:                  1
+max_read_bytes:        83.88 MiB
+read_rows:             10000000 -- 10.00 million
+max_ms:                814
+sample_query:          SELECT dictGet('shop.products_dict', 'category', toUInt64(product_id)) AS category,
+       sum(toUInt64(quantity) * unit_price) AS revenue
+FROM shop.orders
+WHER
+
+Row 5:
+──────
+normalized_query_hash: 6799016832792010430
+runs:                  1
+max_read_bytes:        74.35 MiB
+read_rows:             10000000 -- 10.00 million
+max_ms:                632
+sample_query:          SELECT city,
+       sumIf(toUInt64(quantity) * unit_price, status = 'delivered') AS revenue,
+       countIf(status = 'cancelled') AS cancelled_orders,
+       ro

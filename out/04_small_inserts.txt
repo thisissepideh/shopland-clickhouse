@@ -1,0 +1,5 @@
+[sync]  NewPart در part_log : 500
+[sync]  Partهای فعال همین الان: 5
+[async] NewPart در part_log : 50
+[async] کل ردیف‌ها (باید ۱۰۰۰ باشد): 1000
+[all]   Partهای فعال همین الان: 5

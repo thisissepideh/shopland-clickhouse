@@ -1,0 +1,49 @@
+   ┌─what──────────────┬──count()─┐
+1. │ rows orders_naive │ 10000000 │ -- 10.00 million
+2. │ rows orders       │ 10000000 │ -- 10.00 million
+   └───────────────────┴──────────┘
+    ┌─table────────┬─name────────┬─type────────────────────────────────────────────────────┬─compressed─┬─uncompressed─┬──ratio─┐
+ 1. │ orders       │ city        │ LowCardinality(String)                                  │ 38.33 KiB  │ 7.55 MiB     │ 201.58 │
+ 2. │ orders       │ created_at  │ DateTime                                                │ 8.33 MiB   │ 30.12 MiB    │   3.62 │
+ 3. │ orders       │ customer_id │ UInt32                                                  │ 16.98 MiB  │ 30.12 MiB    │   1.77 │
+ 4. │ orders       │ order_id    │ UInt32                                                  │ 22.07 MiB  │ 30.12 MiB    │   1.36 │
+ 5. │ orders       │ product_id  │ UInt16                                                  │ 12.25 MiB  │ 15.06 MiB    │   1.23 │
+ 6. │ orders       │ quantity    │ UInt8                                                   │ 5.33 MiB   │ 7.53 MiB     │   1.41 │
+ 7. │ orders       │ status      │ Enum8('delivered' = 1, 'cancelled' = 2, 'returned' = 3) │ 4.48 MiB   │ 7.53 MiB     │   1.68 │
+ 8. │ orders       │ unit_price  │ UInt32                                                  │ 18.65 MiB  │ 30.12 MiB    │   1.62 │
+ 9. │ orders_naive │ city        │ String                                                  │ 618.62 KiB │ 134.71 MiB   │ 222.98 │
+10. │ orders_naive │ created_at  │ String                                                  │ 55.98 MiB  │ 257.49 MiB   │    4.6 │
+11. │ orders_naive │ customer_id │ String                                                  │ 65.07 MiB  │ 128.22 MiB   │   1.97 │
+12. │ orders_naive │ order_id    │ String                                                  │ 65.13 MiB  │ 141.99 MiB   │   2.18 │
+13. │ orders_naive │ product_id  │ String                                                  │ 43.79 MiB  │ 112.33 MiB   │   2.57 │
+14. │ orders_naive │ quantity    │ String                                                  │ 7.10 MiB   │ 85.83 MiB    │  12.09 │
+15. │ orders_naive │ status      │ String                                                  │ 24.00 MiB  │ 160.53 MiB   │   6.69 │
+16. │ orders_naive │ unit_price  │ String                                                  │ 48.13 MiB  │ 137.90 MiB   │   2.86 │
+    └──────────────┴─────────────┴─────────────────────────────────────────────────────────┴────────────┴──────────────┴────────┘
+   ┌─table────────┬─compressed─┬─uncompressed─┬─ratio─┐
+1. │ orders_naive │ 309.80 MiB │ 1.13 GiB     │  3.74 │
+2. │ orders       │ 111.98 MiB │ 200.30 MiB   │  1.79 │
+   └──────────────┴────────────┴──────────────┴───────┘
+   ┌─parquet_rows─┬─table_rows─┐
+1. │       850569 │     850569 │
+   └──────────────┴────────────┘
+   ┌─name────────┬─type─────────────────┬─default_type─┬─default_expression─┬─comment─┬─codec_expression─┬─ttl_expression─┐
+1. │ order_id    │ UInt32               │              │                    │         │                  │                │
+2. │ customer_id │ UInt32               │              │                    │         │                  │                │
+3. │ product_id  │ UInt16               │              │                    │         │                  │                │
+4. │ city        │ String               │              │                    │         │                  │                │
+5. │ status      │ String               │              │                    │         │                  │                │
+6. │ quantity    │ UInt8                │              │                    │         │                  │                │
+7. │ unit_price  │ UInt32               │              │                    │         │                  │                │
+8. │ created_at  │ DateTime64(3, 'UTC') │              │                    │         │                  │                │
+   └─────────────┴──────────────────────┴──────────────┴────────────────────┴─────────┴──────────────────┴────────────────┘
+   ┌─name────────┬─type────────────────────────────────────────────────────┬─default_type─┬─default_expression─┬─comment─┬─codec_expression─────┬─ttl_expression─┐
+1. │ order_id    │ UInt32                                                  │              │                    │         │ T64, ZSTD(1)         │                │
+2. │ customer_id │ UInt32                                                  │              │                    │         │ T64, ZSTD(1)         │                │
+3. │ product_id  │ UInt16                                                  │              │                    │         │ T64, ZSTD(1)         │                │
+4. │ city        │ LowCardinality(String)                                  │              │                    │         │                      │                │
+5. │ status      │ Enum8('delivered' = 1, 'cancelled' = 2, 'returned' = 3) │              │                    │         │                      │                │
+6. │ quantity    │ UInt8                                                   │              │                    │         │                      │                │
+7. │ unit_price  │ UInt32                                                  │              │                    │         │ T64, ZSTD(1)         │                │
+8. │ created_at  │ DateTime                                                │              │                    │         │ DoubleDelta, ZSTD(1) │                │
+   └─────────────┴─────────────────────────────────────────────────────────┴──────────────┴────────────────────┴─────────┴──────────────────────┴────────────────┘

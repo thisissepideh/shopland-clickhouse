@@ -1,0 +1,21 @@
+   ┌─sleep(3)─┐
+1. │        0 │
+   └──────────┘
+   ┌─new_orders─┐
+1. │       1000 │
+   └────────────┘
+   ┌─delivered_orders_in_daily_sales_for_new_rows─┐
+1. │                                         1000 │
+   └──────────────────────────────────────────────┘
+   ┌─database─┬─table────────┬─consumer_id────────────────────────────────────────────────────────────────────┬─topics───────────────────────┬─partitions─┬─current_offsets─┐
+1. │ shop     │ orders_queue │ ClickHouse-cb52db7294a6-shop-orders_queue-f8d58430-1037-4785-900e-2b75019223c5 │ ['orders','orders','orders'] │ [0,1,2]    │ [373,442,186]   │
+   └──────────┴──────────────┴────────────────────────────────────────────────────────────────────────────────┴──────────────────────────────┴────────────┴─────────────────┘
+Row 1:
+──────
+raw_message:     this is not json
+kafka_topic:     orders
+kafka_partition: 0
+kafka_offset:    372
+error:           Cannot parse input: expected '{' before: 'this is not json': (at row 1)
+
+received_at:     2026-11-10 09:39:28

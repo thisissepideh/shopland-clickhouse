@@ -1,0 +1,28 @@
+    ┌─explain─────────────────────────────────────────────────────────┐
+ 1. │ Output: count()                                                 │
+ 2. │                                                                 │
+ 3. │ Aggregating                                                     │
+ 4. │ │  Keys:                                                        │
+ 5. │ │  Aggregates: count()                                          │
+ 6. │ │  Skip merging: 0                                              │
+ 7. │ └──Filter ((WHERE + Change column names to column identifiers)) │
+ 8. │    │  Filter column: customer_id = 4321                         │
+ 9. │    └──ReadFromMergeTree (shop.orders)                           │
+10. │          Read type: Default                                     │
+11. │          Parts: 35 | Granules: 1223                             │
+12. │          Output: customer_id                                    │
+13. │          Indexes:                                               │
+14. │            Min-Max                                              │
+15. │              Condition: true                                    │
+16. │              Parts: 35/35                                       │
+17. │              Granules: 1223/1223                                │
+18. │            Partition                                            │
+19. │              Condition: true                                    │
+20. │              Parts: 35/35                                       │
+21. │              Granules: 1223/1223                                │
+22. │            PrimaryKey                                           │
+23. │              Condition: true                                    │
+24. │              Parts: 35/35                                       │
+25. │              Granules: 1223/1223                                │
+26. │            Ranges: 35                                           │
+    └─────────────────────────────────────────────────────────────────┘

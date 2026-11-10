@@ -1,0 +1,25 @@
+# macOS / editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+
+# Docker volumes bind-mounted locally (if you ever switch from named volumes)
+clickhouse_data/
+postgres_data/
+minio_data/
+data/
+
+# Scratch / temp files
+*.log
+*.tmp
+tmp/
+full_run.txt
+
+# Packaged deliverable
+*.zip

@@ -1,0 +1,5 @@
+
+GROUP             TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                                    HOST            CLIENT-ID
+orders_clickhouse orders          0          373             373             0               ClickHouse-cb52db7294a6-shop-orders_queue-f8d58430-1037-4785-900e-2b75019223c5 /172.19.0.4     ClickHouse-cb52db7294a6-shop-orders_queue
+orders_clickhouse orders          1          442             442             0               ClickHouse-cb52db7294a6-shop-orders_queue-f8d58430-1037-4785-900e-2b75019223c5 /172.19.0.4     ClickHouse-cb52db7294a6-shop-orders_queue
+orders_clickhouse orders          2          186             186             0               ClickHouse-cb52db7294a6-shop-orders_queue-f8d58430-1037-4785-900e-2b75019223c5 /172.19.0.4     ClickHouse-cb52db7294a6-shop-orders_queue

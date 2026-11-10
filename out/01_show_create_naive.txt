@@ -1,0 +1,14 @@
+CREATE TABLE shop.orders_naive
+(
+    `order_id` String,
+    `customer_id` String,
+    `product_id` String,
+    `city` String,
+    `status` String,
+    `quantity` String,
+    `unit_price` String,
+    `created_at` String
+)
+ENGINE = MergeTree
+ORDER BY tuple()
+SETTINGS index_granularity = 8192
