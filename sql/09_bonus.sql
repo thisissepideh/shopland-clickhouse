@@ -2,14 +2,7 @@
 -- کارهای امتیازی
 -- ============================================================
 
--- ۱) MinIO / S3  (سرویس minio و bucket به نام shop در docker-compose ساخته شده)
-INSERT INTO FUNCTION s3('http://minio:9000/shop/orders_202503.parquet', 'minioadmin', 'minioadmin', 'Parquet')
-SELECT * FROM shop.orders WHERE toYYYYMM(created_at) = 202503;
-
-SELECT count() AS rows_from_s3
-FROM s3('http://minio:9000/shop/orders_202503.parquet', 'minioadmin', 'minioadmin', 'Parquet');
-
--- ۲) CollapsingMergeTree: موجودی انبار
+-- ۱) CollapsingMergeTree: موجودی انبار
 CREATE TABLE shop.stock
 (
     product_id UInt16,
@@ -19,15 +12,15 @@ CREATE TABLE shop.stock
 ENGINE = CollapsingMergeTree(sign)
 ORDER BY product_id;
 
-INSERT INTO shop.stock VALUES (1, 100, 1);                    -- موجودی اولیه
-INSERT INTO shop.stock VALUES (1, 100, -1), (1, 80, 1);       -- تغییر: ردیف قبلی ابطال، ردیف جدید ثبت
+INSERT INTO shop.stock SELECT 1, 100, 1;                    -- موجودی اولیه
+INSERT INTO shop.stock SELECT * FROM values('product_id UInt16, qty Int32, sign Int8', (1, 100, -1), (1, 80, 1));       -- تغییر: ردیف قبلی ابطال، ردیف جدید ثبت
 
 -- خواندن درست (مستقل از اینکه merge شده یا نه)
 SELECT product_id, sum(qty * sign) AS current_qty
 FROM shop.stock GROUP BY product_id HAVING sum(sign) > 0;
 SELECT * FROM shop.stock FINAL;
 
--- ۳) موتور Merge
+-- ۲) موتور Merge
 CREATE TABLE shop.orders_2024 AS shop.orders ENGINE = MergeTree
 PARTITION BY toYYYYMM(created_at) ORDER BY (city, created_at);
 

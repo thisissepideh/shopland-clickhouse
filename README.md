@@ -525,6 +525,18 @@ FROM shop.orders_all GROUP BY _table, year ORDER BY year;
 
 **توضیح:** `orders_all` خودش داده ندارد و فقط جدول‌هایی از دیتابیس `shop` را که اسمشان با regex جور باشد (`orders` و `orders_2024`) در یک کوئری نشان می‌دهد؛ ستون مجازی `_table` می‌گوید هر ردیف از کدام جدول آمده. regex را طوری نوشتم که `orders_naive` و `orders_by_customer` را شامل نشود. تعداد سفارش‌های ۲۰۲۵ ۹٬۹۹۹٬۹۵۳ است: ۱۰ میلیون منهای ۴۷ سفارش مشتری ۱۲۳۴۵ که در بخش ۳ با Lightweight Delete حذف شد.
 
-### MinIO / S3 — اجرا نشد
+### MinIO / S3
 
-سرویس `minio` در compose (پشت profile `bonus`) و فایل `sql/10_minio.sql` (نوشتن و خواندن Parquet با `s3()`) آماده است، ولی دانلود ایمیج `minio/minio` از Docker Hub روی سیستم من `pull access denied` داد، پس این کار اجرا نشد.
+سرویس `minio` (ایمیج `cgr.dev/chainguard/minio:latest`، چون `minio/minio` روی Docker Hub برای من `pull access denied` داد) پشت profile `bonus` در compose است و bucket به نام `shop` دارد.
+
+```sql
+INSERT INTO FUNCTION s3('http://minio:9000/shop/orders_202503.parquet', 'minioadmin', 'minioadmin', 'Parquet')
+SELECT * FROM shop.orders WHERE toYYYYMM(created_at) = 202503;
+
+SELECT count() AS rows_from_s3
+FROM s3('http://minio:9000/shop/orders_202503.parquet', 'minioadmin', 'minioadmin', 'Parquet');
+```
+
+**خروجی:** `rows_from_s3 = 850564`
+
+**توضیح:** تابع `s3()` مثل `file()` عمل می‌کند، ولی فایل را در یک object storage سازگار با S3 (MinIO) می‌نویسد و می‌خواند؛ ClickHouse با نام سرویس `minio` به آن وصل می‌شود. تعداد ردیف‌ها (۸۵۰٬۵۶۴) ۵ تا کمتر از فایل Parquet بخش ۲ (۸۵۰٬۵۶۹) است، چون فایل محلی قبل از بخش ۳ ساخته شد و فایل S3 بعد از آن؛ در این فاصله سفارش‌های مشتری ۱۲۳۴۵ با Lightweight Delete حذف شده بودند و ۵ تا از آن‌ها مال ماه ۳ بود.
